@@ -30,6 +30,7 @@ export default function Card({
     
   return (
     <Box
+    
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -39,6 +40,13 @@ export default function Card({
         boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
         width: '100%',
         maxWidth: '350px',
+        transition: 'all 0.2s ease-in-out', // smooth animation
+        '&:hover': {
+          transform: 'scale(1.01)',
+          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)',
+        },
+        cursor: 'pointer',
+        
       }}
     >
       {/* Position Title */}

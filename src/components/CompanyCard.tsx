@@ -14,7 +14,7 @@ interface CardProps {
 
 export default function Card({ cid, companyName, address, website, description, telephone}: CardProps) {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 h-auto">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-shadow duration-300 hover:shadow-lg transition-transform duration-300 hover:scale-[1.015]  h-auto">
       <div className="p-6">
         <h3 className="text-xl font-semibold text-gray-800 mb-2">{companyName}</h3>
         

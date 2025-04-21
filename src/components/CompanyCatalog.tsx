@@ -5,21 +5,45 @@ import RefreshButton from './RefreshButton';
 
 
 interface CompanyCatalogProps {
-  CompanyJson: CompanyJson;
+  companyJson: CompanyJson;
+  searchKey?: string | null;
+  filterTags?: string[] | null;
 }
-export default async function CompanyCatalog(companyCatalogProps:CompanyCatalogProps) {
+export default function CompanyCatalog({
+  companyJson,
+  searchKey = null,
+  filterTags = null,
+}: CompanyCatalogProps) {
 
-  const companyJson = companyCatalogProps.CompanyJson;
+ // const companyJson = companyCatalogProps.companyJson;
+ const filteredCompanies = companyJson.data.filter((company: CompanyItem) => {
+  const matchesSearch =
+    !searchKey ||
+    company.name.toLowerCase().includes(searchKey.toLowerCase());
+
+  const matchesTags =
+    !filterTags || filterTags.length === 0 ||
+    company.tags?.some((tag: string) =>
+      filterTags.map(t => t.toLowerCase()).includes(tag.toLowerCase())
+    );
+
+  return matchesSearch && matchesTags;
+});
+
   return (
     <>
       <h2 className="text-2xl text-gray-800 text-center mb-8">
-        Explore {companyJson.count} fabulous companies that you might be interested
+        Explore {filteredCompanies.length} fabulous companies that you might be interested
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
       <div className="absolute top-32 right-60">
                   <RefreshButton />
                 </div>
-        {companyJson.data.map((company: CompanyItem) => (
+        {filteredCompanies.length === 0 ? 
+          (
+            <p className="text-center col-span-full">No matching companies found.</p>
+          ) : (
+            filteredCompanies.map((company: CompanyItem) => (
           <Link 
             href={`/company/${company._id}`} 
             className="w-full max-w-sm" 
@@ -34,7 +58,8 @@ export default async function CompanyCatalog(companyCatalogProps:CompanyCatalogP
               address={company.address}
             />
           </Link>
-        ))}
+            ))
+        )}
       </div>
     </>
   );
