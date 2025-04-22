@@ -73,6 +73,8 @@ export interface CreatePositionItem {
   location: string;
   interviewStart: string;
   interviewEnd: string;
+  skills: string[];
+  salary:any;
 }
 
 export interface PositionItem{

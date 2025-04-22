@@ -49,8 +49,19 @@ export default function EditPosition({ params }: { params: { pid: string } }) {
     interviewStart: "",
     interviewEnd: "",
     createdAt: "",
-    openingPosition: 1
+    openingPosition: 1,
+    salary:{
+      min:0,
+      max:0
+    },
+    skill:[""]
   });
+
+  const [skillInput, setSkillInput] = useState('');
+  useEffect(() => {
+    setSkillInput(position.skill.join(', '));
+  }, [position.skill]);
+  
 
   // Fetch position data
   useEffect(() => {
@@ -65,17 +76,21 @@ export default function EditPosition({ params }: { params: { pid: string } }) {
             toast.error("Failed to load position data");
           }
           setLoading(false);
+          console.log(data)
         } catch (error) {
           console.error("Error fetching position:", error);
           toast.error("Failed to load position data");
           setLoading(false);
+          
         }
       }
+      
     };
 
     if (params.pid) {
       fetchPosition();
     }
+   
   }, [params.pid, status]);
 
   // Redirect if not authenticated
@@ -335,7 +350,58 @@ export default function EditPosition({ params }: { params: { pid: string } }) {
                 </Box>
               ))}
             </Box>
+
+            <Typography variant="subtitle1" fontWeight="bold">skill</Typography>
+            <TextField
+              name="skill"
+              value={skillInput}
+              onChange={(e) => setSkillInput(e.target.value)}
+              onBlur={() =>
+                setPosition((prev: any) => ({
+                  ...prev,
+                  skill: skillInput
+                    .split(',')
+                    .map((s: string) => s.trim())
+                    .filter((s: string) => s.length > 0),
+                }))
+              }
+              variant="outlined"
+              fullWidth
+              helperText="Enter skills separated by commas"
+              className="mb-5 mt-2 text-black"
+            />
+
+
+
+
             
+            <Typography variant="subtitle1" fontWeight="bold">Salary Range</Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 0.5, mb: 2 }}>
+              <TextField
+                label="Min"
+                name="salaryMin"
+                type="number"
+                value={position.salary.min}
+                onChange={handleChange}
+                variant="outlined"
+                size="small"
+                fullWidth
+                InputProps={{ inputProps: { min: 0 } }}
+              />
+              <TextField
+                label="Max"
+                name="salaryMax"
+                type="number"
+                value={position.salary.max}
+                onChange={handleChange}
+                variant="outlined"
+                size="small"
+                fullWidth
+                InputProps={{ inputProps: { min: position.salary.min || 0 } }}
+              />
+            </Box>
+
+
             <Typography variant="subtitle1" fontWeight="bold">Work arrangement</Typography>
             <FormControl fullWidth sx={{ mt: 0.5, mb: 2 }}>
               <Select

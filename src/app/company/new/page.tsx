@@ -167,7 +167,7 @@ export default function CreateCompany() {
               onChange={handleChange}
               variant="outlined"
             />
-            
+{/*             
             <TextField
               margin="normal"
               fullWidth
@@ -179,7 +179,7 @@ export default function CreateCompany() {
               variant="outlined"
               multiline
               rows={3}
-            />
+            /> */}
             
             <TextField
               margin="normal"

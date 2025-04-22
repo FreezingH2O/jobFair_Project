@@ -24,7 +24,14 @@ export default function AddPositionPage() {
     "interviewEnd": '',
     "company": '',
     "openingPosition": 1, // Add default value of 1
+    "skills": [''],
+    "salary": {
+      "min":0,
+      "max":0
+    }
   });
+  const [skillsInput, setSkillsInput] = useState('');
+
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -54,10 +61,31 @@ export default function AddPositionPage() {
 
   const handleChange = (e:any) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+    if (name === "salaryMin" || name === "salaryMax") {
+      const numericValue = parseInt(value) || 0;
+      setFormData((prev) => ({
+        ...prev,
+        salary: {
+          ...prev.salary,
+          [name === "salaryMin" ? "min" : "max"]: numericValue,
+        },
+      }));
+    } else if (name === "skills") {
+      setFormData((prev) => ({
+        ...prev,
+        skills: value.split(',').map((skill: string) => skill.trim())
+
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+    // setFormData(prevState => ({
+    //   ...prevState,
+    //   [name]: value
+    // }));
   };
 
   const handleNumberChange = (e:any) => {
@@ -132,9 +160,15 @@ export default function AddPositionPage() {
     setSubmitting(true);
     
     try {
+      const cleanedSkills = skillsInput
+      .split(',')
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
+  
       // Filter out empty items from arrays
       const cleanedFormData = {
         ...formData,
+        skill: cleanedSkills,
         responsibilities: formData.responsibilities.filter(item => item.trim() !== ''),
         requirements: formData.requirements.filter(item => item.trim() !== ''),
         openingPosition: Number(formData.openingPosition) || 1 // Ensure it's a number
@@ -159,6 +193,11 @@ export default function AddPositionPage() {
         "interviewEnd": '',
         "company": '',
         "openingPosition": 1,
+        "skills": [],
+        "salary": {
+          "min":0,
+          "max":0
+    }
       });
       
     } catch (error) {
@@ -322,9 +361,67 @@ export default function AddPositionPage() {
               </div>
             ))}
           </div>
+              <div>
+              <label className="block font-medium text-black">Skills</label>
+              <TextField
+  label="Skills (comma separated)"
+  fullWidth
+  value={skillsInput}
+  onChange={(e) => setSkillsInput(e.target.value)}
+  onBlur={() => {
+    setFormData((prev) => ({
+      ...prev,
+      skills: skillsInput
+        .split(',')
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0),
+    }));
+  }}
+  variant="outlined"
+  helperText="Separate skills with commas"
+/>
+
+          </div>
+
+            <label className="block font-medium text-black mt-4">Salary Range</label>
+            <div className="flex items-center gap-2 mb-10">
+            <TextField
+              margin="none"
+              label="Min Salary"
+              name="salaryMin"
+              type="number"
+              value={formData.salary.min}
+              onChange={handleChange}
+              variant="outlined"
+              className="w-28 bg-gray-200 rounded-md"
+              size="small"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
+            />
+            <span className="text-black px-1 text-sm">-</span>
+            <TextField
+              margin="none"
+              label="Max Salary"
+              name="salaryMax"
+              type="number"
+              value={formData.salary.max}
+              onChange={handleChange}
+              variant="outlined"
+              className="w-28 bg-gray-200 rounded-md"
+              size="small"
+              InputProps={{
+                inputProps: { min: formData.salary.min || 0 },
+              }}
+            />
+          </div>
+
+
+         
+            
           
           <div>
-            <InputLabel id="work-arrangement-label" className="block text-sm font-medium text-gray-700 mb-1">
+            <InputLabel id="work-arrangement-label" className="block text-sm font-medium text-gray-700 mb-1 mt-6">
               Work arrangement
             </InputLabel>
             <Select

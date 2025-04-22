@@ -4,6 +4,8 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import BusinessIcon from '@mui/icons-material/Business';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+
 import dayjs from 'dayjs';
 
 interface CardProps {
@@ -14,6 +16,11 @@ interface CardProps {
   interviewStart: string;
   interviewEnd: string;
   openingPosition: number;
+  skills: string[];
+  salary: {
+    min: any;
+    max: any;
+  }
 }
 function formatDate(dateString: string){
     return dayjs(dateString).format("MMMM D, YYYY");
@@ -25,7 +32,8 @@ export default function Card({
   location,
   interviewStart,
   interviewEnd,
-  openingPosition
+  openingPosition,
+  salary
 }: CardProps) {
     
   return (
@@ -72,7 +80,18 @@ export default function Card({
             {location}
           </Typography>
         </Box>
+
+        
       </Box>
+
+      <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, mb: 1.5 }}>
+      <MonetizationOnIcon fontSize="small" sx={{ mr: 0.5, color: 'text.primary' }} />
+        <Typography variant="body2" color="text.primary">
+          {`${salary.min} - ${salary.max}`}
+        </Typography>
+      
+      </Box>
+
       
       {/* Date Range */}
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>

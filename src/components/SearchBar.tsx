@@ -21,6 +21,7 @@ interface SearchBarProps {
   }: SearchBarProps) {
     const [showTags, setShowTags] = useState(false);
 
+
    
     return (
       <div>
@@ -35,10 +36,13 @@ interface SearchBarProps {
 
             <button
             onClick={() => setShowTags(!showTags)}
-            className="bg-blue-600 hover:bg-blue-800 text-white px-4 py-3 rounded-full whitespace-nowrap flex items-center text-sm"
+            className={!showTags ? "bg-blue-600 hover:bg-blue-800 text-white px-4 py-3 rounded-full whitespace-nowrap flex items-center text-sm"
+              : "bg-gray-200 hover:bg-gray-400 text-black px-4 py-3 rounded-full whitespace-nowrap flex items-center text-sm"}
 
             >
             {showTags ? "Hide tags" : "Show tags"}
+            
+      
             </button>
         </div>
 

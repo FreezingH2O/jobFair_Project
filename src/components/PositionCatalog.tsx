@@ -63,6 +63,8 @@ export default function PositionCatalog({positionJson, searchKey, filterSkills,s
               interviewStart={position.interviewStart}
               interviewEnd={position.interviewEnd}
               openingPosition={position.openingPosition}
+              salary={position.salary}
+              skills={position.skill}
             />
           </Link>
         ))}
