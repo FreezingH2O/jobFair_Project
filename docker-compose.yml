@@ -1,0 +1,26 @@
+services:
+  backend:
+    build: ./job_fair_Backend
+    ports:
+      - "5001:5000"
+    volumes:
+      - ./job_fair_Backend:/app
+      - /app/node_modules
+    env_file:
+      - ./job_fair_Backend/config/config.env
+    environment:
+      - NODE_ENV=development
+
+  frontend:
+    build: ./se_frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./se_frontend:/app
+      - /app/node_modules
+    env_file:
+      - ./se_frontend/.env.local
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend
